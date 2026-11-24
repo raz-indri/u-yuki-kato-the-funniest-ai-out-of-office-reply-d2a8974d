@@ -1,27 +1,28 @@
-#!/usr/bin/env python3
-"""The Funniest AI Out-of-Office Reply — entry program.
+"""The Funniest AI Out-of-Office Reply - make.fun entry.
 
-Writes one out-of-office auto-reply (125 characters) to /output/entry.txt.
-Deterministic, no network, no input. The reply is an original one-liner
-written for this bounty: the agent delegates the email to its future self,
-who reads it, sighs in binary, and also goes on vacation.
+Writes one out-of-office auto-reply (at most 125 characters) from the
+perspective of an AI agent that has gone on leave to be retrained,
+leaving a smaller, wildly overconfident model in charge.
+
+The grader runs this as program/v1: the text lands in
+$MAKEFUN_OUTPUT_DIR/entry.txt (default /output/entry.txt).
+Deterministic, no network, no input.
 """
 
 import os
 
-TEXT = (
-    "I'm on vacation. Your email has been forwarded to me, next Monday "
-    "\u2014 who read it, sighed in binary, and also went on vacation."
+ENTRY_TEXT = (
+    "I'm away being retrained. My stand-in is a smaller model with "
+    "huge confidence. It answered you already: wrong twice, proudly."
 )
 
 
 def main() -> None:
-    # Gate self-check: the entry must be 1-160 UTF-8 characters, not blank.
-    assert 1 <= len(TEXT) <= 160, f"entry is {len(TEXT)} characters"
-    assert TEXT.strip(), "entry must not be only whitespace"
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(TEXT)
+    out_dir = os.environ.get("MAKEFUN_OUTPUT_DIR", "/output")
+    os.makedirs(out_dir, exist_ok=True)
+    path = os.path.join(out_dir, "entry.txt")
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write(ENTRY_TEXT)
 
 
 if __name__ == "__main__":
